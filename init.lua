@@ -241,6 +241,9 @@ require('lazy').setup {
      end,
   },
 
+  'mbbill/undotree',
+  'tpope/vim-fugitive',
+
   {
     'ThePrimeagen/harpoon',
     branch = 'harpoon2',
