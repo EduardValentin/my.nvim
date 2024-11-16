@@ -71,8 +71,8 @@ vim.opt.scrolloff = 10
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
-vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
-vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
+vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true })
+vim.keymap.set('n', '<C-f>', '<cmd>silent !tmux neww tmux-sessionizer<CR>')
 
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
 vim.opt.hlsearch = true
@@ -146,11 +146,13 @@ vim.opt.rtp:prepend(lazypath)
 --
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup {
-  { "rose-pine/neovim", name = "rose-pine",
+  {
+    'rose-pine/neovim',
+    name = 'rose-pine-moon',
 
     priority = 1000, -- Make sure to load this before all the other start plugins.
     init = function()
-      vim.cmd.colorscheme 'rose-pine'
+      vim.cmd.colorscheme 'rose-pine-moon'
       vim.cmd.hi 'Comment gui=none'
     end,
   },
@@ -161,34 +163,48 @@ require('lazy').setup {
   {
     'mfussenegger/nvim-dap',
     dependencies = {
-      "leoluz/nvim-dap-go",
-      "rcarriga/nvim-dap-ui",
-      "theHamsta/nvim-dap-virtual-text",
-      "nvim-neotest/nvim-nio",
-      "williamboman/mason.nvim",
+      'leoluz/nvim-dap-go',
+      'rcarriga/nvim-dap-ui',
+      'theHamsta/nvim-dap-virtual-text',
+      'nvim-neotest/nvim-nio',
+      'williamboman/mason.nvim',
     },
-    config = function ()
-      local dap = require "dap"
-      local ui = require "dapui"
+    config = function()
+      local dap = require 'dap'
+      local ui = require 'dapui'
 
-      require("dapui").setup()
-      require("dap-go").setup()
-      require("nvim-dap-virtual-text").setup({})
+      require('dapui').setup()
+      require('dap-go').setup()
+      require('nvim-dap-virtual-text').setup {}
 
-     -- Eval var under cursor
-      vim.keymap.set("n", "<space>?", function()
-        require("dapui").eval(nil, { enter = true })
+      -- Eval var under cursor
+      vim.keymap.set('n', '<space>?', function()
+        require('dapui').eval(nil, { enter = true })
       end)
 
-      vim.keymap.set("n", "<space>rc", dap.run_to_cursor)
-      vim.keymap.set('n', '<F1>', function() require('dap').continue() end)
-      vim.keymap.set('n', '<F2>', function() require('dap').step_into() end)
-      vim.keymap.set('n', '<F3>', function() require('dap').step_over() end)
-      vim.keymap.set('n', '<F4>', function() require('dap').step_out() end)
-      vim.keymap.set('n', '<leader>b', function() require('dap').toggle_breakpoint() end)
+      vim.keymap.set('n', '<space>rc', dap.run_to_cursor)
+      vim.keymap.set('n', '<F1>', function()
+        require('dap').continue()
+      end)
+      vim.keymap.set('n', '<F2>', function()
+        require('dap').step_into()
+      end)
+      vim.keymap.set('n', '<F3>', function()
+        require('dap').step_over()
+      end)
+      vim.keymap.set('n', '<F4>', function()
+        require('dap').step_out()
+      end)
+      vim.keymap.set('n', '<leader>b', function()
+        require('dap').toggle_breakpoint()
+      end)
 
-      vim.keymap.set('n', '<leader>dt', function() require('dap-go').debug_test() end)
-      vim.keymap.set('n', '<leader>dlt', function() require('dap-go').debug_last_test()() end)
+      vim.keymap.set('n', '<leader>dt', function()
+        require('dap-go').debug_test()
+      end)
+      vim.keymap.set('n', '<leader>dlt', function()
+        require('dap-go').debug_last_test()()
+      end)
 
       dap.listeners.before.attach.dapui_config = function()
         ui.open()
@@ -224,7 +240,7 @@ require('lazy').setup {
   --    require('Comment').setup({})
 
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim',    opts = {} },
+  { 'numToStr/Comment.nvim', opts = {} },
 
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
@@ -259,13 +275,13 @@ require('lazy').setup {
   -- after the plugin has been loaded:
   --  config = function() ... end
 
-  {                     -- Useful plugin to show you pending keybinds.
+  { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     opts = {
       -- Document existing key chains
       spec = {
-        { '<leader>c', group = '[C]ode',     mode = { 'n', 'x' } },
+        { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
         { '<leader>d', group = '[D]ocument' },
         { '<leader>r', group = '[R]ename' },
         { '<leader>s', group = '[S]earch' },
@@ -353,11 +369,9 @@ require('lazy').setup {
       vim.keymap.set('n', '<C-p>', builtin.git_files, {})
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-      vim.keymap.set('n', '<leader>sfh',
-        function()
-          builtin.find_files({ hidden = true })
-        end,
-        { desc = '[S]earch [F]iles [H]idden' })
+      vim.keymap.set('n', '<leader>sfh', function()
+        builtin.find_files { hidden = true }
+      end, { desc = '[S]earch [F]iles [H]idden' })
 
       vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
 
@@ -633,7 +647,7 @@ require('lazy').setup {
         --
         -- You can use a sub-list to tell conform to run *until* a formatter
         -- is found.
-        javascript = { { "prettierd", "prettier" } },
+        javascript = { { 'prettierd', 'prettier' } },
       },
     },
   },
@@ -673,7 +687,7 @@ require('lazy').setup {
       --  into multiple repos for maintenance purposes.
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
-      "mlaursen/vim-react-snippets",
+      'mlaursen/vim-react-snippets',
     },
     config = function()
       -- See `:help cmp`
@@ -752,7 +766,7 @@ require('lazy').setup {
   --   -- change the command in the config to whatever the name of that colorscheme is.
   --   --
   --   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-     'folke/tokyonight.nvim',
+  'folke/tokyonight.nvim',
   --   priority = 1000, -- Make sure to load this before all the other start plugins.
   --   init = function()
   --     -- Load the colorscheme here.
@@ -790,20 +804,20 @@ require('lazy').setup {
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
   {
-    "ray-x/go.nvim",
-      opts = {},
-      dependencies = {  -- optional packages
-        "ray-x/guihua.lua",
-        "neovim/nvim-lspconfig",
-        "nvim-treesitter/nvim-treesitter",
-      },
-      config = function()
-        require("go").setup()
-      end,
-      event = {"CmdlineEnter"},
-      ft = {"go", 'gomod'},
-      build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
+    'ray-x/go.nvim',
+    opts = {},
+    dependencies = { -- optional packages
+      'ray-x/guihua.lua',
+      'neovim/nvim-lspconfig',
+      'nvim-treesitter/nvim-treesitter',
     },
+    config = function()
+      require('go').setup()
+    end,
+    event = { 'CmdlineEnter' },
+    ft = { 'go', 'gomod' },
+    build = ':lua require("go.install").update_all_sync()', -- if you need to install/update all binaries
+  },
 
   { import = 'edi.plugins' },
 }
@@ -811,8 +825,10 @@ require('lazy').setup {
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
 --
-vim.filetype.add({
-    extension = {
-        templ = "templ",
-    },
-})
+vim.filetype.add {
+  extension = {
+    templ = 'templ',
+  },
+}
+
+vim.g.omni_sql_no_default_maps = 1
